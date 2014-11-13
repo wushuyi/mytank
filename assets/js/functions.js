@@ -4,7 +4,8 @@
             angle : Math.PI / 180
         };
         var renderer = new PIXI.autoDetectRenderer(800, 600);
-        $$('.wrapper').grab(renderer.view);
+        $$('#myWorld').grab(renderer.view);
+
         var stage = new PIXI.Stage;
 
         var assetsToLoader = ["./assets/images/myTank.json"];
@@ -20,8 +21,8 @@
         var myTank;
 
         function onAssetsLoaded() {
-
-            var texture = PIXI.Texture.fromFrame(frames[1]);
+            var tankColor = 0;
+            var texture = PIXI.Texture.fromFrame(frames[tankColor]);
             myTank = new PIXI.Sprite(texture);
             myTank.anchor.x = 0.5;
             myTank.anchor.y = 0.5;
@@ -29,20 +30,37 @@
             myTank.position.y = 20;
 
             myTank.interactive = true;
-            //myTank.click = function(){
-            //    texture = PIXI.Texture.fromFrame(frames[0]);
-            //    myTank.setTexture(texture);
-            //    console.log(texture);
-            //    myTank.updateCache();
-            //    console.log(myTank);
-            //};
             myTank.click = function(){
-                myTank.rotation += 90 * util.angle;
+                (tankColor == 1) ? (tankColor = 0) : (tankColor = 1)
+                texture = PIXI.Texture.fromFrame(frames[tankColor]);
+                myTank.setTexture(texture);
             };
 
             myWorld.addChild(myTank);
             requestAnimationFrame(animate);
         }
+
+        window.addEvent('keypress', function(e){
+            var key = e.key;
+            switch (key){
+                case 'd':
+                    myTank.rotation = 90 * util.angle;
+                    myTank.position.x += 20;
+                    break;
+                case 's':
+                    myTank.rotation = 180 * util.angle;
+                    myTank.position.y += 20;
+                    break;
+                case 'a':
+                    myTank.rotation = 270 * util.angle;
+                    myTank.position.x -= 20;
+                    break;
+                case 'w':
+                    myTank.rotation = 360 * util.angle;
+                    myTank.position.y -= 20;
+                    break;
+            }
+        });
 
 
         function animate() {

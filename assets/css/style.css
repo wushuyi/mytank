@@ -24,6 +24,10 @@ input:-moz-placeholder { color:#a9a9a9; }
 textarea:-moz-placeholder { color:#a9a9a9; }
 
 
+#myWorld{
+    width: 800px;
+    height: 600px;
+}
 
 /* Media queries
 -------------------------------------------------------------------------------*/
