@@ -1,0 +1,56 @@
+{
+  "frames": {
+    "tank1.png": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 40,
+        "h": 40
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 40,
+        "h": 40
+      },
+      "sourceSize": {
+        "w": 40,
+        "h": 40
+      }
+    },
+    "tank2.png": {
+      "frame": {
+        "x": 0,
+        "y": 40,
+        "w": 40,
+        "h": 40
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 40,
+        "h": 40
+      },
+      "sourceSize": {
+        "w": 40,
+        "h": 40
+      }
+    }
+  },
+  "meta": {
+    "app": "http://www.wuhsuyi.com",
+    "version": "1.0",
+    "image": "tanks.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 400,
+      "h": 300
+    },
+    "scale": "1",
+    "smartupdate": "$TexturePacker:SmartUpdate:9e3e5afd01ea8e418afabfbdcd724485$"
+  }
+}
