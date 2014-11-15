@@ -10,7 +10,8 @@
             urls: ['./assets/sound/start_stage.mp3']
         }),
         user_move : new Howl({
-            urls: ['./assets/sound/user_move.mp3']
+            urls: ['./assets/sound/user_move.mp3'],
+            volume: 0.2
         })
     };
 

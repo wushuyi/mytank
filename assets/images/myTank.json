@@ -59,6 +59,66 @@
         "w": 40,
         "h": 40
       }
+    },
+    "bomb1.png": {
+      "frame": {
+        "x": 120,
+        "y": 340,
+        "w": 40,
+        "h": 40
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 40,
+        "h": 40
+      },
+      "sourceSize": {
+        "w": 40,
+        "h": 40
+      }
+    },
+    "bomb2.png": {
+      "frame": {
+        "x": 160,
+        "y": 340,
+        "w": 40,
+        "h": 40
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 40,
+        "h": 40
+      },
+      "sourceSize": {
+        "w": 40,
+        "h": 40
+      }
+    },
+    "bomb3.png": {
+      "frame": {
+        "x": 200,
+        "y": 340,
+        "w": 40,
+        "h": 40
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 40,
+        "h": 40
+      },
+      "sourceSize": {
+        "w": 40,
+        "h": 40
+      }
     }
   },
   "meta": {
@@ -70,7 +130,6 @@
       "w": 400,
       "h": 300
     },
-    "scale": "1",
-    "smartupdate": "$TexturePacker:SmartUpdate:9e3e5afd01ea8e418afabfbdcd724485$"
+    "scale": "1"
   }
 }
