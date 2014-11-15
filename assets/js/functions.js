@@ -1,10 +1,226 @@
 (function (window, undefined) {
+    var mySound = {
+        fire : new Howl({
+            urls: ['./assets/sound/fire.mp3']
+        }),
+        fire_reach_wall : new Howl({
+            urls: ['./assets/sound/fire_reach_wall.mp3']
+        }),
+        start_stage : new Howl({
+            urls: ['./assets/sound/start_stage.mp3']
+        }),
+        user_move : new Howl({
+            urls: ['./assets/sound/user_move.mp3']
+        })
+    };
+
+    var Tank = new Class({
+        sprite: null,
+        position: new PIXI.Point(20, 20),
+        anchor: new PIXI.Point(0.5, 0.5),
+        orientations: 'up', // this options: 'up', 'down', 'left', 'left';
+        world: {
+            width: 520,
+            height: 520
+        },
+        initialize: function(texture, options){
+            var sprite = this.sprite = new PIXI.Sprite(texture);
+            if(typeOf(options) !==  "object"){
+                options = {};
+            }
+            options.position? (this.position = options.position) : null;
+            options.anchor? (this.anchor = options.anchor) : null;
+            this.world = options.world || this.world;
+
+            sprite.position =  this.position;
+            sprite.anchor =  this.anchor;
+        },
+        isOnBorderline: function(){
+            var sprite = this.sprite;
+            var world = this.world;
+            var isIn = {
+                top: sprite.position.y <= 20,
+                bottom: sprite.position.y >= world.height -20,
+                left: sprite.position.x <= 20,
+                right: sprite.position.x >= world.width - 20
+            };
+
+            //console.log(isIn);
+            return isIn;
+        },
+        movementUP: function(){
+            var sprite = this.sprite;
+            var direction = 'up';
+            sprite.rotation = 360 * Math.PI / 180;
+            if(this.orientations != direction){
+                this.orientations = direction;
+                return false;
+            }
+            if(this.isOnBorderline().top){
+                return false;
+            }
+            sprite.position.y -= 20;
+        },
+        movementDown: function(){
+            var sprite = this.sprite;
+            var direction = 'down';
+            sprite.rotation = 180 * Math.PI / 180;
+            if(this.orientations != direction){
+                this.orientations = direction;
+                return false;
+            }
+            if(this.isOnBorderline().bottom){
+                return false;
+            }
+            sprite.position.y += 20;
+        },
+        movementLeft: function(){
+            var sprite = this.sprite;
+            var direction = 'left';
+            sprite.rotation = 270 * Math.PI / 180;
+            if(this.orientations != direction){
+                this.orientations = direction;
+                return false;
+            }
+            if(this.isOnBorderline().left){
+                return false;
+            }
+            sprite.position.x -= 20;
+        },
+        movementRight: function(){
+            var sprite = this.sprite;
+            var direction = 'right';
+            sprite.rotation = 90 * Math.PI / 180;
+            if(this.orientations != direction){
+                this.orientations = direction;
+                return false;
+            }
+            if(this.isOnBorderline().right){
+                return false;
+            }
+            sprite.position.x += 20;
+        }
+    });
+    var Ammo = new Class({
+        fps: 30,
+        env: {
+            now: null,
+            delta: null,
+            then: Date.now(),
+            interval: 1000 / 30
+        },
+        sprite: null,
+        position: new PIXI.Point(20, 20),
+        anchor: new PIXI.Point(0.5, 0.5),
+        orientations: 'up', // this options: 'up', 'down', 'left', 'left';
+        world: {
+            width: 520,
+            height: 520
+        },
+        needDel: null,
+        initialize: function(texture, options){
+            var sprite = this.sprite = new PIXI.Sprite(texture);
+            if(typeOf(options) !==  "object"){
+                options = {};
+            }
+            sprite.position = options.position || this.position;
+            sprite.anchor = options.anchor || this.anchor;
+            this.orientations = options.orientations || this.orientations;
+            this.world = options.world || this.world;
+            this.env.interval = 1000 / this.fps;
+        },
+        isOnBorderline: function(){
+            var sprite = this.sprite;
+            var world = this.world;
+            var isIn = {
+                top: sprite.position.y <= 0,
+                bottom: sprite.position.y >= world.height,
+                left: sprite.position.x <= 0,
+                right: sprite.position.x >= world.width
+            };
+            this.isIn = isIn;
+            //console.log(isIn);
+            return isIn;
+        },
+        movementUP: function(){
+            var sprite = this.sprite;
+            var direction = 'up';
+            sprite.rotation = 360 * Math.PI / 180;
+            if(this.orientations != direction){
+                this.orientations = direction;
+                return false;
+            }
+            if(this.isOnBorderline().top){
+                this.needDel = true;
+                return false;
+            }
+            sprite.position.y -= 20;
+
+        },
+        movementDown: function(){
+            var sprite = this.sprite;
+            var direction = 'down';
+            sprite.rotation = 180 * Math.PI / 180;
+            if(this.orientations != direction){
+                this.orientations = direction;
+                return false;
+            }
+            if(this.isOnBorderline().bottom){
+                this.needDel = true;
+                return false;
+            }
+            sprite.position.y += 20;
+        },
+        movementLeft: function(){
+            var sprite = this.sprite;
+            var direction = 'left';
+            sprite.rotation = 270 * Math.PI / 180;
+            if(this.orientations != direction){
+                this.orientations = direction;
+                return false;
+            }
+            if(this.isOnBorderline().left){
+                this.needDel = true;
+                return false;
+            }
+            sprite.position.x -= 20;
+        },
+        movementRight: function(){
+            var sprite = this.sprite;
+            var direction = 'right';
+            sprite.rotation = 90 * Math.PI / 180;
+            if(this.orientations != direction){
+                this.orientations = direction;
+                return false;
+            }
+            if(this.isOnBorderline().right){
+                this.needDel = true;
+                return false;
+            }
+            sprite.position.x += 20;
+        },
+        autoMove: function(){
+            switch (this.orientations){
+                case 'up':
+                    this.movementUP();
+                    break;
+                case 'down':
+                    this.movementDown();
+                    break;
+                case 'left':
+                    this.movementLeft();
+                    break;
+                case 'right':
+                    this.movementRight();
+                    break;
+            }
+        }
+    });
+
     window.addEvent('domready', function () {
-        var util = {
-            angle: Math.PI / 180
-        };
+
         var loopList = [];
-        var renderer = new PIXI.autoDetectRenderer(800, 600);
+        var renderer = new PIXI.autoDetectRenderer(600, 520);
         $$('#myWorld').grab(renderer.view);
 
         var stage = new PIXI.Stage;
@@ -14,36 +230,58 @@
         loader.onComplete = onAssetsLoaded
         loader.load();
 
-        var frames = ["tank1.png", 'tank2.png', 'ammo.png'];
+        var frames = ["tank1.png", 'tank2.png', 'ammo.png', 'bomb1.png', 'bomb2.png', 'bomb3.png'];
 
         var myWorld = new PIXI.DisplayObjectContainer();
+        myWorld.position.x = 0;
+        myWorld.position.y = 0;
+
+        var toolBar = new PIXI.DisplayObjectContainer();
+        toolBar.position.x = 520;
+        toolBar.position.y = 0;
+
+        var myWorldBg = new PIXI.Graphics();
+        myWorldBg.beginFill('0X000000', 1);
+        myWorldBg.drawRect(0, 0, 520, 520);
+        myWorldBg.endFill();
+        myWorld.addChild(myWorldBg);
+
+        var axis = new PIXI.Graphics();
+        axis.lineStyle (1, '0xFF0000');
+        for(var i= 0; i < 520; i += 20){
+            axis.moveTo(i, 0);
+            axis.lineTo(i, 520);
+            axis.moveTo(0, i);
+            axis.lineTo(520, i);
+        }
+        myWorld.addChild(axis);
+
+        var toolBarBg = new PIXI.Graphics();
+        toolBarBg.beginFill('0X999999', 1);
+        toolBarBg.drawRect(0, 0, 80, 520);
+        toolBarBg.endFill();
+        toolBar.addChild(toolBarBg);
+
 
         stage.addChild(myWorld);
+        stage.addChild(toolBar);
+
         var myTank;
-        var ammo;
-
+        var ammoTexture;
+        var bomb1Texture;
+        var bomb2Texture;
+        var bomb3Texture;
         function onAssetsLoaded() {
-            var tankColor = 0;
-            var texture = PIXI.Texture.fromFrame(frames[tankColor]);
-            myTank = new PIXI.Sprite(texture);
-            myTank.anchor.x = 0.5;
-            myTank.anchor.y = 0.5;
-            myTank.position.x = 20;
-            myTank.position.y = 20;
-
-            myTank.interactive = true;
-            myTank.click = function () {
-                (tankColor == 1) ? (tankColor = 0) : (tankColor = 1)
-                texture = PIXI.Texture.fromFrame(frames[tankColor]);
-                myTank.setTexture(texture);
-            };
-
-            var texture2 = PIXI.Texture.fromFrame(frames[2]);
-            ammo = new PIXI.Sprite(texture2);
-            ammo.anchor.x = 0.5;
-            ammo.anchor.y = 0.5;
-
-            myWorld.addChild(myTank);
+            ammoTexture = PIXI.Texture.fromFrame(frames[2]);
+            bomb1Texture = PIXI.Texture.fromFrame(frames[3]);
+            bomb2Texture = PIXI.Texture.fromFrame(frames[4]);
+            bomb3Texture = PIXI.Texture.fromFrame(frames[5]);
+            var texture = PIXI.Texture.fromFrame(frames[0]);
+            myTank = new Tank(texture, {
+                position: new PIXI.Point(240, 500)
+            });
+            myWorld.addChild(myTank.sprite);
+            mySound.start_stage.play();
             requestAnimationFrame(animate);
         }
 
@@ -53,34 +291,71 @@
             //console.log(key);
 
             switch (key) {
-                case 'd':
-                    myTank.rotation = 90 * util.angle;
-                    myTank.position.x += 20;
+                case 'w':
+                    mySound.user_move.pause();
+                    mySound.user_move.play();
+                    myTank.movementUP();
                     break;
                 case 's':
-                    myTank.rotation = 180 * util.angle;
-                    myTank.position.y += 20;
+                    mySound.user_move.pause();
+                    mySound.user_move.play();
+                    myTank.movementDown();
                     break;
                 case 'a':
-                    myTank.rotation = 270 * util.angle;
-                    myTank.position.x -= 20;
+                    mySound.user_move.pause();
+                    mySound.user_move.play();
+                    myTank.movementLeft();
                     break;
-                case 'w':
-                    myTank.rotation = 360 * util.angle;
-                    myTank.position.y -= 20;
+                case 'd':
+                    mySound.user_move.pause();
+                    mySound.user_move.play();
+                    myTank.movementRight();
                     break;
                 case 'space':
-                    ammo.rotation = myTank.rotation;
-                    ammo.position = myTank.position.clone();
-                    myWorld.addChild(ammo);
-                    requestAnimationFrame(animate);
-                    break;
-                case 'h':
-                    var test = function(time){
-                        //console.log('run');
+                    var ammo = new Ammo(ammoTexture, {
+                        position: myTank.position.clone(),
+                        orientations: myTank.orientations
+                    });
+                    mySound.fire.play();
+                    ammo.isBomb = false;
+                    ammo.bombNum = 1;
+                    myWorld.addChild(ammo.sprite);
+                    ammo.loop = function(time){
+                        ammo.env.now = Date.now();
+                        ammo.env.delta = ammo.env.now - ammo.env.then;
+                        if (ammo.env.delta < ammo.env.interval) {
+                            return false;
+                        }
+                        ammo.env.then = ammo.env.now - (ammo.env.delta % ammo.env.interval);
+                        if(ammo.needDel){
+                            if(ammo.isBomb){
+                                loopList.splice(loopList.indexOf(ammo.loop),1);
+                                myWorld.removeChild(ammo.sprite);
+                                return false;
+                            }
+                            ammo.env.interval = 1000 / 20;
+                            switch (ammo.bombNum){
+                                case 1:
+                                    mySound.fire_reach_wall.play();
+                                    ammo.sprite.setTexture(bomb2Texture);
+                                    ammo.bombNum += 1;
+                                    break;
+                                case 2:
+                                    ammo.sprite.setTexture(bomb3Texture);
+                                    ammo.bombNum += 1;
+                                    break;
+                                case 3:
+                                    ammo.sprite.setTexture(bomb1Texture);
+                                    ammo.bombNum += 1;
+                                    break;
+                                default :
+                                    ammo.isBomb = true;
+                            }
+                            return false;
+                        }
+                        ammo.autoMove();
                     };
-                    loopList.push(test);
-                    console.log(loopList.indexOf(test));
+                    loopList.push(ammo.loop);
                     break;
             }
             function animate() {
@@ -88,25 +363,21 @@
                 requestAnimationFrame(animate);
             }
         });
-        function Ammo(texture, position, myWorld) {
-            var texture = PIXI.Texture.fromFrame(frames[2]);
-            var ammo = new PIXI.Sprite(texture);
-            ammo.anchor.x = 0.5;
-            ammo.anchor.y = 0.5;
-            console.log(myTank);
-            ammo.rotation = myTank.rotation;
-            ammo.position = myTank.position.clone();
-            myWorld.addChild(ammo);
-        }
 
         loopList.push(function(time){
             renderer.render(stage);
         });
 
         function loopRun(time){
-            for(var i = 0, j = loopList.length; i < j; i++){
-                loopList[i](time);
-            }
+            loopList.forEach(function(a, b){
+                loopList[b]();
+            });
+            //for(var key in loopList){
+            //    console.log(key);
+            //    if(typeof loopList[key] === "function"){
+            //        loopList[key](time);
+            //    }
+            //}
         }
 
         function animate(time) {
