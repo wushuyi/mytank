@@ -1,4 +1,5 @@
 (function (window, undefined) {
+    PIXI.dontSayHello = true;
     var mySound = {
         fire : new Howl({
             urls: ['./assets/sound/fire.mp3']
