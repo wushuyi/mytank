@@ -1,5 +1,6 @@
 (function (window, undefined) {
     PIXI.dontSayHello = true;
+
     var mySound = {
         fire : new Howl({
             urls: ['./assets/sound/fire.mp3']
@@ -103,6 +104,7 @@
             sprite.position.x += 20;
         }
     });
+
     var Ammo = new Class({
         fps: 30,
         env: {
@@ -219,6 +221,35 @@
         }
     });
 
+    var map = [
+        [0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0],
+        [0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0],
+        [2, 2, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 2, 2],
+        [2, 2, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 2, 2],
+        [2, 2, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 2, 2],
+        [2, 2, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 2, 2],
+        [2, 2, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 2, 2],
+        [2, 2, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 2, 2],
+        [2, 2, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 2, 2],
+        [2, 2, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 2, 2],
+        [2, 2, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 2, 2],
+        [2, 2, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 2, 2],
+        [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+        [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+        [3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3],
+        [3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 3, 3, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3],
+        [4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4],
+        [4, 4, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 4, 4],
+        [4, 4, 1, 1, 3, 3, 1, 1, 3, 3, 1, 1, 1, 1, 1, 1, 3, 3, 1, 1, 3, 3, 1, 1, 4, 4],
+        [4, 4, 1, 1, 3, 3, 1, 1, 3, 3, 1, 1, 1, 1, 1, 1, 3, 3, 1, 1, 3, 3, 1, 1, 4, 4],
+        [4, 4, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 4, 4],
+        [4, 4, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 4, 4],
+        [4, 4, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 4, 4],
+        [4, 4, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 4, 4],
+        [0, 0, 4, 4, 4, 4, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 4, 4, 4, 4, 0, 0],
+        [0, 0, 4, 4, 4, 4, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 4, 4, 4, 4, 0, 0],
+    ];
+
     window.addEvent('domready', function () {
 
         var loopList = [];
@@ -232,21 +263,28 @@
         loader.onComplete = onAssetsLoaded
         loader.load();
 
-        var frames = ["tank1.png", 'tank2.png', 'ammo.png', 'bomb1.png', 'bomb2.png', 'bomb3.png'];
+        var frames = [
+            "tank1.png", 'tank2.png', 'ammo.png', 'bomb1.png', 'bomb2.png', 'bomb3.png',
+            'wall.png', "ice.png", 'iron.png', 'grass.png', 'river.png'
+        ];
 
         var myWorld = new PIXI.DisplayObjectContainer();
         myWorld.position.x = 0;
         myWorld.position.y = 0;
 
+        var myMap = new PIXI.DisplayObjectContainer();
+        myMap.position.x = 0;
+        myMap.position.y = 0;
+
+        //var myMapBg = new PIXI.Graphics();
+        //myMapBg.beginFill('0X000000', 1);
+        //myMapBg.drawRect(0, 0, 520, 520);
+        //myMapBg.endFill();
+        //myMap.addChild(myMapBg);
+
         var toolBar = new PIXI.DisplayObjectContainer();
         toolBar.position.x = 520;
         toolBar.position.y = 0;
-
-        var myWorldBg = new PIXI.Graphics();
-        myWorldBg.beginFill('0X000000', 1);
-        myWorldBg.drawRect(0, 0, 520, 520);
-        myWorldBg.endFill();
-        myWorld.addChild(myWorldBg);
 
         var axis = new PIXI.Graphics();
         axis.lineStyle (1, '0xFF0000');
@@ -256,7 +294,7 @@
             axis.moveTo(0, i);
             axis.lineTo(520, i);
         }
-        myWorld.addChild(axis);
+        myMap.addChild(axis);
 
         var toolBarBg = new PIXI.Graphics();
         toolBarBg.beginFill('0X999999', 1);
@@ -265,6 +303,7 @@
         toolBar.addChild(toolBarBg);
 
 
+        stage.addChild(myMap);
         stage.addChild(myWorld);
         stage.addChild(toolBar);
 
@@ -273,14 +312,63 @@
         var bomb1Texture;
         var bomb2Texture;
         var bomb3Texture;
+        var wallTexture;
+        var iceTexture;
+        var ironTexture;
+        var grassTexture;
+        var riverTexture;
         function onAssetsLoaded() {
             ammoTexture = PIXI.Texture.fromFrame(frames[2]);
             bomb1Texture = PIXI.Texture.fromFrame(frames[3]);
             bomb2Texture = PIXI.Texture.fromFrame(frames[4]);
             bomb3Texture = PIXI.Texture.fromFrame(frames[5]);
+            wallTexture = PIXI.Texture.fromFrame(frames[6]);
+            iceTexture = PIXI.Texture.fromFrame(frames[7]);
+            ironTexture = PIXI.Texture.fromFrame(frames[8]);
+            grassTexture = PIXI.Texture.fromFrame(frames[9]);
+            riverTexture = PIXI.Texture.fromFrame(frames[10]);
+            map.forEach(function(listY, indexY){
+                listY.forEach(function(type, indexX){
+                    switch (type){
+                        case 1:
+                            var wall = new PIXI.Sprite(wallTexture);
+                            wall.position.y = indexY * 20;
+                            wall.position.x = indexX * 20;
+                            myMap.addChild(wall);
+                            break;
+                        case 2:
+                            var ice = new PIXI.Sprite(iceTexture);
+                            ice.position.y = indexY * 20;
+                            ice.position.x = indexX * 20;
+                            myMap.addChild(ice);
+                            break;
+                        case 3:
+                            var iron = new PIXI.Sprite(ironTexture);
+                            iron.position.y = indexY * 20;
+                            iron.position.x = indexX * 20;
+                            myMap.addChild(iron);
+                            break;
+                        case 4:
+                            var grass = new PIXI.Sprite(grassTexture);
+                            grass.position.y = indexY * 20;
+                            grass.position.x = indexX * 20;
+                            myMap.addChild(grass);
+                            break;
+                        case 5:
+                            var river = new PIXI.Sprite(riverTexture);
+                            river.position.y = indexY * 20;
+                            river.position.x = indexX * 20;
+                            myMap.addChild(river);
+                            break;
+                    }
+                });
+            });
+
+            window.myMap = myMap;
+
             var texture = PIXI.Texture.fromFrame(frames[0]);
             myTank = new Tank(texture, {
-                position: new PIXI.Point(240, 500)
+                position: new PIXI.Point(180, 500)
             });
             myWorld.addChild(myTank.sprite);
             mySound.start_stage.play();
